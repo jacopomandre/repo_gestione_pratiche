@@ -38,5 +38,9 @@ public class UpsertVersionePraticaDto implements Serializable {
 	
 	@NonNull
 	private LocalDate dataDiNascita;
+	
+	private String fileName;
+	
+	private String filePath;
 
 }

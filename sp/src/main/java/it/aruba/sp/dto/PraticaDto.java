@@ -28,5 +28,7 @@ public class PraticaDto implements Serializable{
 	private List<VersionePraticaDto> versioni;
     private LocalDateTime dataCreazione;
     private LocalDateTime ultimoAggiornamento;
-	
+	private String fileName;
+	private String filePath;
+
 }

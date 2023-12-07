@@ -27,26 +27,22 @@ import it.aruba.sp.utils.JsonUtils;
 @SpringBootTest
 public class ControllerTest {
 	
-	private static final String MODIFICATA = "-Modificata";
+	private static final String MODIFICA = "-suffissoModifica";
 
 	@Autowired
 	private MockMvc mvc;
 	
 	@Autowired
-	JwtService jwtService;
-	
-	@Autowired
-	ObjectMapper objectMapper;
+	private JwtService jwtService;
 	
 	@Test
 	public void salvataggioAndRecuperoPraticaNuova () throws Exception {
 		String codicePratica = "NUOVA-PRATICA";
 		salvataggioPratica(codicePratica);
 		updateVersionePratica(codicePratica);
-		avanzamentoPratica(codicePratica + MODIFICATA, null);
-		avanzamentoPratica(codicePratica + MODIFICATA, "APPROVATA");
-		PraticaDto praticaDto = getPraticaDtoByCodicePratica(codicePratica + MODIFICATA);
-		
+		avanzamentoPratica(codicePratica + MODIFICA, null);
+		avanzamentoPratica(codicePratica + MODIFICA, "APPROVATA");
+		PraticaDto praticaDto = getPraticaDtoByCodicePratica(codicePratica + MODIFICA);
 		assertThat(praticaDto.getVersioni().size()).isEqualTo(4);
 		
 	}
@@ -75,6 +71,8 @@ public class ControllerTest {
 		.cognome("Rossi")
 		.codiceFiscale("RSSMRA80A01H501U")
 		.dataDiNascita(LocalDate.of(1980, 1, 1))
+		.fileName("nomeFile")
+		.filePath("pathFile")
 		.build();
 
 		String inputJson = JsonUtils.mapToJson(createBody);
@@ -92,13 +90,15 @@ public class ControllerTest {
 	public PraticaDto updateVersionePratica(String codicePratica) throws Exception  {
 		String uri = "/pratica/update";
 		UpsertVersionePraticaDto createBody = UpsertVersionePraticaDto.builder()
-		.codicePratica(codicePratica + MODIFICATA)
+		.codicePratica(codicePratica + MODIFICA)
 		.descrizione("versione modificata")
 		.note("revisione")
 		.nome("Giuseppe")
 		.cognome("Verdi")
 		.codiceFiscale("VRDGPP62A01H501S")
 		.dataDiNascita(LocalDate.of(1962, 1, 1))
+		.fileName("nomeFile"+MODIFICA)
+		.filePath("pathFile"+MODIFICA)
 		.build();
 
 		String inputJson = JsonUtils.mapToJson(createBody);

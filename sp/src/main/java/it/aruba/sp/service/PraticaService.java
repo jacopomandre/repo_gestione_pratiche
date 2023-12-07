@@ -42,6 +42,8 @@ public class PraticaService {
 
 		Pratica pratica = Pratica.builder()
 				.codicePratica(upsertVersionePraticaDto.getCodicePratica())
+				.fileName(upsertVersionePraticaDto.getFileName())
+				.filePath(upsertVersionePraticaDto.getFilePath())
 				.versioni(new ArrayList<VersionePratica>())
 				.build();
 		
@@ -76,6 +78,8 @@ public class PraticaService {
 		
 		Pratica pratica = versionePraticaDb.getPratica();
 		pratica.setCodicePratica(upsertVersionePraticaDto.getCodicePratica());
+		pratica.setFileName(upsertVersionePraticaDto.getFileName());
+		pratica.setFilePath(upsertVersionePraticaDto.getFilePath());
 		
 		pratica = praticaRepository.save(pratica);		
 		pratica.getVersioni().add(versionePraticaInsert);

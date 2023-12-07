@@ -1,12 +1,10 @@
 package it.aruba.sp.utils;
 
-import java.util.Arrays;
 import java.util.Optional;
 
 import it.aruba.sp.entity.RisultatoPratica;
 import it.aruba.sp.entity.StatoPratica;
 import it.aruba.sp.entity.VersionePratica;
-import it.aruba.sp.enumeration.RisultatoPraticaEnum;
 import it.aruba.sp.enumeration.StatoPraticaEnum;
 
 public class ValidationUtils {
