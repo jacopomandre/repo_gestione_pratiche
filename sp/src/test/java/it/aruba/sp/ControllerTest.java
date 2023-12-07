@@ -2,8 +2,6 @@ package it.aruba.sp;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Date;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -14,10 +12,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import it.aruba.sp.dto.InsertVersionePraticaDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import it.aruba.sp.dto.PraticaDto;
+import it.aruba.sp.dto.UpsertPraticaDto;
 import it.aruba.sp.entity.Utente;
 import it.aruba.sp.service.JwtService;
 import it.aruba.sp.utils.JsonUtils;
@@ -32,29 +30,12 @@ public class ControllerTest {
 	@Autowired
 	JwtService jwtService;
 	
-	public void createVersione() throws Exception {
-	   String uri = "/versione";
-	   InsertVersionePraticaDto ivpDto = InsertVersionePraticaDto.builder()
-			   .idPratica(1L)
-			   .idStato(10001L)
-			   .idRisultato(10001L)
-			   .descrizione("modifica")
-			   .build();
-	   
-	   String inputJson = JsonUtils.mapToJson(ivpDto);
-	   MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.post(uri).header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtService.generateToken(Utente.builder().username("1234567890").password("").id(1L).build()))
-	      .contentType(MediaType.APPLICATION_JSON_VALUE).content(inputJson)).andReturn();
-	   
-	   int status = mvcResult.getResponse().getStatus();
-	   assertThat(status).isEqualTo(200);
-	   String content = mvcResult.getResponse().getContentAsString();
-	   assertThat(content).isNotNull();
-	}
+	@Autowired
+	ObjectMapper objectMapper;
 	
-//	@Test
-	public PraticaDto getPraticaDtoByCodicePratica() throws Exception {
 	
-		String codicePratica = "PRIMA";
+	
+	public PraticaDto getPraticaDtoByCodicePratica(String codicePratica) throws Exception {
 		
 		String uri = "/pratica/"+ codicePratica;
 		MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(uri).header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtService.generateToken(Utente.builder().username("1234567890").password("").id(1L).build()))
@@ -68,12 +49,33 @@ public class ControllerTest {
 		return praticaDto;
 	}
 	
-	@Test 
-	public void salvataggioRecupero() throws Exception  {
-		createVersione();
-		PraticaDto output = getPraticaDtoByCodicePratica();
-		assertThat(output.getVersioni().size()).isEqualTo(4);
+	public PraticaDto salvataggioPratica(String codicePratica) throws Exception  {
+		String uri = "/pratica/crea-nuova";
+		UpsertPraticaDto createBody = UpsertPraticaDto.builder()
+		.codicePratica(codicePratica)
+		.descrizioneVersione("versione iniziale")
+		.noteVersione("bozza")
+		.build();
+
+		String inputJson = JsonUtils.mapToJson(createBody);
+		MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.post(uri).header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtService.generateToken(Utente.builder().username("1234567890").password("").id(1L).build()))
+				.contentType(MediaType.APPLICATION_JSON_VALUE).content(inputJson)).andReturn();
+
+		int status = mvcResult.getResponse().getStatus();
+		assertThat(status).isEqualTo(200);
+		String content = mvcResult.getResponse().getContentAsString();
+		PraticaDto praticaDto = JsonUtils.mapFromJson(content, PraticaDto.class);
+		return praticaDto;
 		
+	}
+	
+	@Test
+	public void salvataggioAndRecuperoPraticaNuova () throws Exception {
+		String codicePratica = "NUOVA-PRATICA";
+		salvataggioPratica(codicePratica);
+		PraticaDto praticaDto = getPraticaDtoByCodicePratica(codicePratica);
+		assertThat(praticaDto.getVersioni().size()).isEqualTo(1);
+		assertThat(praticaDto.getVersioni().getFirst().getNumeroVersione()).isEqualTo(1);
 	}
 	
 }

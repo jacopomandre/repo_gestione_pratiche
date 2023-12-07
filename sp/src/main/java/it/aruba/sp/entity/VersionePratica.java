@@ -35,15 +35,9 @@ public class VersionePratica {
     @JoinColumn(name= "stato", nullable=false)
 	private StatoPratica stato;
 	
-//	@Column (name= "stato")
-//	private Long idStato;
-	
 	@ManyToOne
     @JoinColumn(name= "risultato", nullable=true)
 	private RisultatoPratica risultato;
-	
-//	@Column (name= "risultato")
-//	private Long idRisultato;
 	
 	@ManyToOne
     @JoinColumn(name= "pratica", nullable=false)
@@ -56,8 +50,5 @@ public class VersionePratica {
 	
 	@CreationTimestamp
     private LocalDateTime dataCreazione;
-	
-	@UpdateTimestamp
-    private LocalDateTime ultimoAggiornamento;
 
 }

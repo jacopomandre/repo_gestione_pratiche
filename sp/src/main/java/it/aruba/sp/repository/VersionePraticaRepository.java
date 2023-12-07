@@ -8,5 +8,7 @@ import it.aruba.sp.entity.VersionePratica;
 @Repository
 public interface VersionePraticaRepository extends JpaRepository<VersionePratica, Long> {
 
+	public VersionePratica findTopByPratica_CodicePraticaOrderByNumeroVersioneDesc(String codicePratica);
+
 
 }

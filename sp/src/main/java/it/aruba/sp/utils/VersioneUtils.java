@@ -7,7 +7,7 @@ import it.aruba.sp.entity.VersionePratica;
 public class VersioneUtils {
 
 	private static final Integer ZERO = 0;
-	private static final Integer UNO = 1;
+	public static final Integer UNO = 1;
 
 	public static Integer calcolaMaxNumeroVersione(List <VersionePratica>versioni) {
 
@@ -21,4 +21,5 @@ public class VersioneUtils {
 
 		return Integer.sum(calcolaMaxNumeroVersione(versioni), UNO);
 	}
+	
 }

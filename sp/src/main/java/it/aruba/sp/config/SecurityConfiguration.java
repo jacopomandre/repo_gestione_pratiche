@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
@@ -26,13 +27,17 @@ public class SecurityConfiguration {
 
 		http.csrf(csrf -> csrf.disable())
 		.authorizeHttpRequests(authorize -> {
-//		    authorize.requestMatchers("/auth/**").permitAll();
-		    authorize.anyRequest().authenticated();
+		    authorize.anyRequest().permitAll();
+//		    authorize.anyRequest().authenticated();
 		    })
+//		TODO DA RIMUOVERE
+		.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()))
+		
 		.sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 		.authenticationProvider(authenticationProvider)
 		.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}
-
+	
+	
 }

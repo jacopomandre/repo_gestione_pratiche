@@ -1,9 +1,7 @@
 package it.aruba.sp.dto;
 
 import java.io.Serializable;
-import java.time.Instant;
-
-import org.springframework.lang.NonNull;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,7 +23,6 @@ public class VersionePraticaDto implements Serializable{
 	private String risultato;
 	private Integer numeroVersione;
 	private String note;
-    private Instant dataCreazione;
-    private Instant ultimoAggiornamento;
+    private LocalDateTime dataCreazione;
 
 }

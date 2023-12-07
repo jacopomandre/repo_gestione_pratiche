@@ -2,6 +2,7 @@ package it.aruba.sp.dto;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -25,7 +26,7 @@ public class PraticaDto implements Serializable{
 	
 	private String codicePratica;
 	private List<VersionePraticaDto> versioni;
-    private Instant dataCreazione;
-    private Instant ultimoAggiornamento;
+    private LocalDateTime dataCreazione;
+    private LocalDateTime ultimoAggiornamento;
 	
 }

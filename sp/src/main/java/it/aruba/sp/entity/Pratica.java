@@ -1,6 +1,6 @@
 package it.aruba.sp.entity;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -43,9 +43,9 @@ public class Pratica {
 	private List<VersionePratica> versioni;
 	
 	@CreationTimestamp
-    private Instant dataCreazione;
+    private LocalDateTime dataCreazione;
 	
 	@UpdateTimestamp
-    private Instant ultimoAggiornamento;
+    private LocalDateTime ultimoAggiornamento;
 	
 }
