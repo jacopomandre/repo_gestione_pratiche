@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import it.aruba.sp.dto.PraticaDto;
-import it.aruba.sp.dto.UpsertPraticaDto;
+import it.aruba.sp.dto.UpsertVersionePraticaDto;
 import it.aruba.sp.service.PraticaService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -36,7 +37,7 @@ public class PraticaController {
 	
 	@PostMapping("/crea-nuova")
 	public ResponseEntity<PraticaDto> createPratica (
-			@RequestBody UpsertPraticaDto createPraticaDto) {
+			@RequestBody @Valid UpsertVersionePraticaDto createPraticaDto) {
 		
 		return new ResponseEntity<PraticaDto>(
 				praticaService.createPratica(createPraticaDto), 
@@ -45,14 +46,16 @@ public class PraticaController {
 	}
 	
 	@PutMapping("/update")
-	public ResponseEntity<PraticaDto> updatePratica (
+	public ResponseEntity<PraticaDto> updateVersionePratica (
 			@RequestParam String codicePratica,
-			@RequestBody UpsertPraticaDto updatePraticaDto) {
+			@RequestBody @Valid UpsertVersionePraticaDto updatePraticaDto) {
 		
 		return new ResponseEntity<PraticaDto>(
-				praticaService.updatePratica(codicePratica, updatePraticaDto), 
+				praticaService.updateVersionePratica(codicePratica, updatePraticaDto), 
 				HttpStatus.OK);
 
 	}
+	
+	
 
 }

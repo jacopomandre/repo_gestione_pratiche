@@ -2,6 +2,8 @@ package it.aruba.sp.enumeration;
 
 public enum StatoPraticaEnum {
 	
-	CREATA
+	CREATA,
+	IN_ELABORAZIONE,
+	COMPLETATA
 
 }

@@ -4,7 +4,7 @@ import java.util.List;
 
 import it.aruba.sp.entity.VersionePratica;
 
-public class VersioneUtils {
+public class CalcoloVersioneUtils {
 
 	private static final Integer ZERO = 0;
 	public static final Integer UNO = 1;

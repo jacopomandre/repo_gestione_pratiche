@@ -48,4 +48,5 @@ public class Pratica {
 	@UpdateTimestamp
     private LocalDateTime ultimoAggiornamento;
 	
+	
 }
