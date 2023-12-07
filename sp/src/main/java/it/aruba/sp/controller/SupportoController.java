@@ -20,7 +20,7 @@ public class SupportoController {
 	
 	@PutMapping("/avanzamento-pratica")
 	public ResponseEntity<VersionePraticaDto> avanzamentoPratica (
-			@RequestParam String codicePratica,
+			@RequestParam (name ="idPratica") String codicePratica,
 			@RequestParam (required = false) String risultato) throws CloneNotSupportedException {
 		
 		return new ResponseEntity<VersionePraticaDto>(

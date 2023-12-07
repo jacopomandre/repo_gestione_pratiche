@@ -47,7 +47,7 @@ public class PraticaController {
 	
 	@PutMapping("/update")
 	public ResponseEntity<PraticaDto> updateVersionePratica (
-			@RequestParam String codicePratica,
+			@RequestParam (name = "idPratica") String codicePratica,
 			@RequestBody @Valid UpsertVersionePraticaDto updatePraticaDto) {
 		
 		return new ResponseEntity<PraticaDto>(

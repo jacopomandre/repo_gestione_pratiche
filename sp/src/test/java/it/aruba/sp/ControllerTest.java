@@ -1,8 +1,11 @@
 package it.aruba.sp;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatException;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import java.time.LocalDate;
+import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +31,8 @@ import it.aruba.sp.utils.JsonUtils;
 public class ControllerTest {
 	
 	private static final String MODIFICA = "-suffissoModifica";
+
+	private static final String NON_ESISTENTE = "CODICE_NON_ESISTENTE";
 
 	@Autowired
 	private MockMvc mvc;
@@ -105,7 +110,7 @@ public class ControllerTest {
 		MvcResult mvcResult = mvc.perform(
 				MockMvcRequestBuilders
 				.put(uri)
-				.queryParam("codicePratica", codicePratica)
+				.queryParam("idPratica", codicePratica)
 				.header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtService.generateToken(Utente.builder().username("1234567890").password("").id(1L).build()))
 				.contentType(MediaType.APPLICATION_JSON_VALUE)
 				.content(inputJson))
@@ -125,7 +130,7 @@ public class ControllerTest {
 		MvcResult mvcResult = mvc.perform(
 				MockMvcRequestBuilders
 				.put(uri)
-				.queryParam("codicePratica", codicePratica)
+				.queryParam("idPratica", codicePratica)
 				.queryParam("risultato", risultato)
 				.header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtService.generateToken(Utente.builder().username("1234567890").password("").id(1L).build()))
 				.contentType(MediaType.APPLICATION_JSON_VALUE))
