@@ -27,12 +27,12 @@ public class SecurityConfiguration {
 
 		http.csrf(csrf -> csrf.disable())
 		.authorizeHttpRequests(authorize -> {
-		    authorize.anyRequest().permitAll();
-//		    authorize.anyRequest().authenticated();
+//			SWITCH ON PER VEDERE LA CONSOLE H2
+//		    authorize.anyRequest().permitAll();
+		    authorize.anyRequest().authenticated();
 		    })
-//		TODO DA RIMUOVERE
-		.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()))
-		
+//		SWITCH ON PER VEDERE LA CONSOLE H2
+//		.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()))
 		.sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 		.authenticationProvider(authenticationProvider)
 		.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
