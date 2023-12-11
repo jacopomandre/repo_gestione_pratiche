@@ -1,6 +1,6 @@
 package it.aruba.sp.entity;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -12,8 +12,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,10 +29,6 @@ public class Pratica {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@ManyToOne
-    @JoinColumn(name= "allegato", nullable=true)
-	private Allegato allegato;
-	
 	@NonNull
 	@Column(unique = true)
 	private String codicePratica;
@@ -43,9 +37,14 @@ public class Pratica {
 	private List<VersionePratica> versioni;
 	
 	@CreationTimestamp
-    private Instant dataCreazione;
+    private LocalDateTime dataCreazione;
 	
 	@UpdateTimestamp
-    private Instant ultimoAggiornamento;
+    private LocalDateTime ultimoAggiornamento;
+	
+	private String fileName;
+	
+	private String filePath;
+
 	
 }

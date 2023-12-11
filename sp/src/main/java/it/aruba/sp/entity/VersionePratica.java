@@ -1,9 +1,9 @@
 package it.aruba.sp.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.lang.NonNull;
 
 import jakarta.persistence.Entity;
@@ -12,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,7 +23,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class VersionePratica {
+public class VersionePratica implements Cloneable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,15 +36,9 @@ public class VersionePratica {
     @JoinColumn(name= "stato", nullable=false)
 	private StatoPratica stato;
 	
-//	@Column (name= "stato")
-//	private Long idStato;
-	
 	@ManyToOne
     @JoinColumn(name= "risultato", nullable=true)
 	private RisultatoPratica risultato;
-	
-//	@Column (name= "risultato")
-//	private Long idRisultato;
 	
 	@ManyToOne
     @JoinColumn(name= "pratica", nullable=false)
@@ -57,7 +52,22 @@ public class VersionePratica {
 	@CreationTimestamp
     private LocalDateTime dataCreazione;
 	
-	@UpdateTimestamp
-    private LocalDateTime ultimoAggiornamento;
+	@NonNull
+	private String nome;
+	
+	@NonNull
+	private String cognome;
+	
+	@NonNull
+	@Size(min = 16, max = 16)
+	private String codiceFiscale;
+	
+	@NonNull
+	private LocalDate dataDiNascita;
+	
+	@Override
+    public VersionePratica clone() throws CloneNotSupportedException {
+        return (VersionePratica) super.clone();
+    }
 
 }

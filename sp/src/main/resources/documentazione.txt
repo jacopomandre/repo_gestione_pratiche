@@ -1,0 +1,126 @@
+# Documento di Analisi Funzionale
+
+## 1. Introduzione
+
+### 1.1 Scopo del Document
+Il presente documento ha lo scopo di fornire un'analisi dettagliata dei requisiti e delle funzionalità del Sistema Gestione Pratiche (SP) nel contesto del progetto di implementazione di una soluzione a microservizi. 
+
+### 1.2 Obiettivi del Progetto
+Il progetto mira a realizzare un Sistema Gestione Pratiche (SP) basato su microservizi per consentire a Sistemi Esterni (SE) di delegare la creazione e la gestione delle pratiche, ricevere aggiornamenti in modalità push sullo stato delle pratiche e interagire con il loro ciclo di vita.
+
+### 1.3 Contesto del Progetto
+Il contesto del progetto comprende l'interazione tra Sistemi Esterni (SE) e il Sistema Gestione Pratiche (SP). Gli SE possono creare pratiche, aggiornarne i dati, ottenere informazioni in modalità pull e scaricare allegati in formato PDF. Il ciclo di vita di una Pratica include gli stati di "Pratica creata," "Pratica in lavorazione," e "Pratica completata" con risultato "Approvata" o "Rifiutata."
+
+## 2. Requisiti del Sistema
+
+### 2.1 Requisiti Funzionali
+
+#### 2.1.1 Creazione di una Pratica (API1) 
+Il Sistema Gestione Pratiche (SGP) dovrà fornire un'API che permette ai Sistemi Esterni (SE) di creare una Pratica. La richiesta (Azione1) deve contenere almeno i seguenti dati identificativi dell'utente: Nome, Cognome, Codice Fiscale, Data di Nascita e un documento PDF come Allegato Pratica. La risposta deve includere l'identificativo univoco (IdPratica) della Pratica appena creata nel SGP.
+
+#### 2.1.2 Aggiornamento di una Pratica (API2)
+Il SP deve offrire un'API che consente ai SE di aggiornare i dati di una Pratica mentre è nello stato "Pratica creata" (Stato1). La richiesta (Azione2) deve consentire l'aggiornamento di alcuni o tutti i dati forniti in fase di creazione della Pratica, inclusi eventuali aggiornamenti dell'Allegato Pratica. La Pratica da aggiornare è identificata dall'IdPratica.
+
+#### 2.1.3 Ottenere Informazioni su una Pratica (API3)
+Il SGP deve mettere a disposizione un'API che permette ai SE di ottenere informazioni su una Pratica in modalità pull (Azione3). La richiesta deve includere l'IdPratica della Pratica di cui si desiderano le informazioni. La risposta deve contenere dettagli sullo stato attuale, la cronologia degli stati precedenti, i dati utente attuali, ecc.
+
+#### 2.1.4 Scaricare un PDF Allegato (API4)
+Il SGP deve fornire un'API per consentire ai SE di scaricare il PDF Allegato Pratica (Azione4). La richiesta deve includere l'IdPratica della Pratica di cui si vuole scaricare l'allegato.
+
+### 2.2 Requisiti di Prestazione e Vincoli Tecnici
+
+#### 2.2.1 Sicurezza e Autenticazione
+Tutte le API devono essere protette da autenticazione basata su JSON Web Token (JWT) per garantire un accesso sicuro alle funzionalità del SP.
+
+#### 2.2.2 Utilizzo di Kafka
+Il SP deve utilizzare Kafka per gestire le comunicazioni asincrone, in particolare per le callback relative ai cambi di stato delle pratiche.
+
+## 3. Funzionalità del Sistema Gestione Pratiche (SP)
+
+### 3.1 Descrizione funzionamento API1
+
+#### 3.1.1 Tipo di Chiamata REST
+GET
+
+#### 3.1.2 Path Variable
+{codicePratica}: una stringa che identifica il codice della pratica.
+
+#### 3.1.3 Mapping del Servizio
+/pratica/{codicePratica}
+
+#### 3.1.4 Output Previsto
+
+{
+  "codicePratica": "string",
+  "versioni": [
+    {
+      "descrizione": "string",
+      "stato": "string",
+      "risultato": "string",
+      "numeroVersione": "int",
+      "note": "string",
+      "dataCreazione": "yyyy-MM-ddTHH:mm:ss",
+      "nome": "string",
+      "cognome": "string",
+      "codiceFiscale": "string",
+      "dataDiNascita": "yyyy-MM-dd"
+    }
+  ],
+  "dataCreazione": "yyyy-MM-ddTHH:mm:ss",
+  "ultimoAggiornamento": "yyyy-MM-ddTHH:mm:ss",
+  "nomeFile": "string",
+  "pathFile": "string"
+}
+
+#### 3.1.5 Gestione Errori
+Nel caso venga effettuata la chiamata con un idPratica non presente in anagrafica allora il servizio lancerà l'eccezione NoSuchElementException
+
+### 3.2 Descrizione funzionamento API2
+
+#### 3.2.1 Tipo di Chiamata REST
+PUT
+
+#### 3.2.2 Request Param & Request Body
+Request Param {idPratica}: una stringa che identifica il codice della pratica
+Request Body : {
+  "codicePratica": "string",
+  "descrizione": "string",
+  "note": "string",
+  "nome": "string",
+  "cognome": "string",
+  "codiceFiscale": "string (lunghezza 16 caratteri)",
+  "dataDiNascita": "yyyy-MM-dd",
+  "fileName": "string",
+  "filePath": "string"
+}
+
+#### 3.1.3 Mapping del Servizio
+/update
+
+#### 3.1.4 Output Previsto
+
+{
+  "codicePratica": "string",
+  "versioni": [
+    {
+      "descrizione": "string",
+      "stato": "string",
+      "risultato": "string",
+      "numeroVersione": "int",
+      "note": "string",
+      "dataCreazione": "yyyy-MM-ddTHH:mm:ss",
+      "nome": "string",
+      "cognome": "string",
+      "codiceFiscale": "string",
+      "dataDiNascita": "yyyy-MM-dd"
+    }
+  ],
+  "dataCreazione": "yyyy-MM-ddTHH:mm:ss",
+  "ultimoAggiornamento": "yyyy-MM-ddTHH:mm:ss",
+  "nomeFile": "string",
+  "pathFile": "string"
+}
+
+#### 3.1.5 Gestione Errori
+Nel caso venga effettuata la chiamata con un idPratica non presente in anagrafica allora il servizio lancerà l'eccezione NoSuchElementException.
+Nel caso in cui si provi a modificare un elemento in stato superiore al primo, il servizio lancera l'eccezione RuntimeException con un messaggio esplicativo.

@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 
 import it.aruba.sp.dto.PraticaDto;
+import it.aruba.sp.dto.UpsertVersionePraticaDto;
 import it.aruba.sp.dto.VersionePraticaDto;
 import it.aruba.sp.entity.Pratica;
 import it.aruba.sp.entity.VersionePratica;
@@ -34,6 +35,11 @@ public class Converter {
 		propertyMapper.addMappings(
 				mapper -> mapper.map(src -> src.getRisultato().getDescrizione(), VersionePraticaDto::setRisultato));
 		return modelMapper;
+	}
+	
+	public static VersionePratica convertUpsertVersionePraticaDtoToVersionePratica(UpsertVersionePraticaDto upsertVersionePraticaDto) {
+		ModelMapper modelMapper = new ModelMapper();
+		return modelMapper.map(upsertVersionePraticaDto, VersionePratica.class);
 	}
 
 }
